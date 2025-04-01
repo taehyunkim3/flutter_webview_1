@@ -8,7 +8,7 @@
 
 ```
 # 웹뷰 URL 설정
-WEBVIEW_URL=https://test-app.ttokttok365.com
+WEBVIEW_URL=https://테스트 웹뷰 주소
 
 # 카카오 SDK 설정
 KAKAO_NATIVE_APP_KEY=여기에_카카오_네이티브_앱_키_입력
