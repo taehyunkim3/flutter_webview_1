@@ -121,24 +121,32 @@ Page resource error:
           },
         ),
       )
+      // ====================== 앱과 웹 간의 통신 채널 설정 시작 ======================
+      // 1. 카카오 로그인 채널 설정
+      // [웹→앱] 통신: 웹에서 KakaoLogin.postMessage('로그인요청') 호출 시 앱의 _handleKakaoLogin 함수가 실행됨
       ..addJavaScriptChannel(
         'KakaoLogin',
         onMessageReceived: (JavaScriptMessage message) {
           _handleKakaoLogin();
         },
       )
+      // 2. 애플 로그인 채널 설정
+      // [웹→앱] 통신: 웹에서 AppleLogin.postMessage('로그인요청') 호출 시 앱의 _handleAppleLogin 함수가 실행됨
       ..addJavaScriptChannel(
         'AppleLogin',
         onMessageReceived: (JavaScriptMessage message) {
           _handleAppleLogin();
         },
       )
+      // 3. 일반 메시지 통신 채널 설정
+      // [웹→앱] 통신: 웹에서 Flutter.postMessage('메시지내용') 호출 시 앱의 _handleFlutterMessages 함수가 실행됨
       ..addJavaScriptChannel(
         'Flutter',
         onMessageReceived: (JavaScriptMessage message) {
           _handleFlutterMessages(message.message);
         },
       )
+      // ====================== 앱과 웹 간의 통신 채널 설정 끝 ======================
       ..loadRequest(Uri.parse('https://test-app.ttokttok365.com'));
 
     // Android 플랫폼 특화 설정
@@ -151,12 +159,14 @@ Page resource error:
     _controller = controller;
   }
 
+  // 카카오 로그인 처리 함수
   Future<void> _handleKakaoLogin() async {
     try {
+      // 앱에서 카카오 SDK를 통한 로그인 처리
       final OAuthToken token = await UserApi.instance.loginWithKakaoAccount();
       final User user = await UserApi.instance.me();
 
-      // 로그인 결과를 웹으로 전송
+      // 로그인 결과를 JSON 형태로 구성
       final String result = '''
       {
         "accessToken": "${token.accessToken}",
@@ -167,15 +177,21 @@ Page resource error:
       }
       ''';
 
+      // [앱→웹] 통신: 로그인 성공 결과를 웹으로 전달
+      // 웹에서는 window.onKakaoLoginResult 함수를 구현하여 결과를 받아야 함
       await _controller.runJavaScript('window.onKakaoLoginResult($result);');
     } catch (error) {
       debugPrint('카카오 로그인 에러: $error');
+      // [앱→웹] 통신: 로그인 실패 정보를 웹으로 전달
+      // 웹에서는 window.onKakaoLoginError 함수를 구현하여 에러를 처리해야 함
       await _controller.runJavaScript('window.onKakaoLoginError("$error");');
     }
   }
 
+  // 애플 로그인 처리 함수
   Future<void> _handleAppleLogin() async {
     try {
+      // 앱에서 애플 SDK를 통한 로그인 처리
       final credential = await SignInWithApple.getAppleIDCredential(
         scopes: [
           AppleIDAuthorizationScopes.email,
@@ -183,7 +199,7 @@ Page resource error:
         ],
       );
 
-      // 로그인 결과를 웹으로 전송
+      // 로그인 결과를 JSON 형태로 구성
       final String result = '''
       {
         "identityToken": "${credential.identityToken ?? ''}",
@@ -194,19 +210,25 @@ Page resource error:
       }
       ''';
 
+      // [앱→웹] 통신: 로그인 성공 결과를 웹으로 전달
+      // 웹에서는 window.onAppleLoginResult 함수를 구현하여 결과를 받아야 함
       await _controller.runJavaScript('window.onAppleLoginResult($result);');
     } catch (error) {
       debugPrint('애플 로그인 에러: $error');
+      // [앱→웹] 통신: 로그인 실패 정보를 웹으로 전달
+      // 웹에서는 window.onAppleLoginError 함수를 구현하여 에러를 처리해야 함
       await _controller.runJavaScript('window.onAppleLoginError("$error");');
     }
   }
 
+  // 일반 메시지 처리 함수
   Future<void> _handleFlutterMessages(String message) async {
     try {
-      // 메시지 처리 로직 추가
+      // 웹에서 전달받은 메시지 처리
       debugPrint('웹에서 받은 메시지: $message');
 
-      // 필요한 경우 웹으로 응답 전송
+      // [앱→웹] 통신: 메시지 수신 확인을 웹으로 전달
+      // 웹에서는 window.onFlutterResponse 함수를 구현하여 응답을 받아야 함
       await _controller.runJavaScript('window.onFlutterResponse("메시지 수신 완료");');
     } catch (error) {
       debugPrint('메시지 처리 에러: $error');
