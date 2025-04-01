@@ -1,16 +1,15 @@
 # flutter_webview_1
 
-A new Flutter project.
+새로운 Flutter 프로젝트입니다.
 
-## Getting Started
+## 시작하기
 
-This project is a starting point for a Flutter application.
+이 프로젝트는 Flutter 애플리케이션을 위한 시작점입니다.
 
-A few resources to get you started if this is your first Flutter project:
+처음으로 Flutter 프로젝트를 시작하는 경우 도움이 될 몇 가지 리소스:
 
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
+- [실습: 첫 번째 Flutter 앱 작성하기](https://docs.flutter.dev/get-started/codelab)
+- [요리책: 유용한 Flutter 예제](https://docs.flutter.dev/cookbook)
 
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+Flutter 개발을 시작하는 데 도움이 필요하다면,
+[온라인 문서](https://docs.flutter.dev/)를 참조하세요. 튜토리얼, 샘플, 모바일 개발 가이드 및 전체 API 참조를 제공합니다.

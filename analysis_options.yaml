@@ -1,28 +1,25 @@
-# This file configures the analyzer, which statically analyzes Dart code to
-# check for errors, warnings, and lints.
+# 이 파일은 분석기를 구성하며, Dart 코드를 정적으로 분석하여
+# 오류, 경고 및 린트를 검사합니다.
 #
-# The issues identified by the analyzer are surfaced in the UI of Dart-enabled
-# IDEs (https://dart.dev/tools#ides-and-editors). The analyzer can also be
-# invoked from the command line by running `flutter analyze`.
+# 분석기에서 식별된 문제들은 Dart를 지원하는 IDE의 UI에서 표시됩니다
+# (https://dart.dev/tools#ides-and-editors). 분석기는 또한
+# `flutter analyze` 명령을 실행하여 명령줄에서 호출할 수 있습니다.
 
-# The following line activates a set of recommended lints for Flutter apps,
-# packages, and plugins designed to encourage good coding practices.
+# 다음 줄은 Flutter 앱, 패키지 및 플러그인을 위한 권장 린트 세트를 활성화합니다.
+# 이는 좋은 코딩 관행을 장려하도록 설계되었습니다.
 include: package:flutter_lints/flutter.yaml
 
 linter:
-  # The lint rules applied to this project can be customized in the
-  # section below to disable rules from the `package:flutter_lints/flutter.yaml`
-  # included above or to enable additional rules. A list of all available lints
-  # and their documentation is published at https://dart.dev/lints.
+  # 이 프로젝트에 적용되는 린트 규칙은 아래 섹션에서 사용자 정의할 수 있습니다.
+  # 위에서 포함된 `package:flutter_lints/flutter.yaml`의 규칙을 비활성화하거나
+  # 추가 규칙을 활성화할 수 있습니다. 사용 가능한 모든 린트와 해당 문서는
+  # https://dart.dev/lints에서 확인할 수 있습니다.
   #
-  # Instead of disabling a lint rule for the entire project in the
-  # section below, it can also be suppressed for a single line of code
-  # or a specific dart file by using the `// ignore: name_of_lint` and
-  # `// ignore_for_file: name_of_lint` syntax on the line or in the file
-  # producing the lint.
+  # 아래 섹션에서 전체 프로젝트에 대한 린트 규칙을 비활성화하는 대신,
+  # `// ignore: name_of_lint` 및 `// ignore_for_file: name_of_lint` 구문을
+  # 사용하여 특정 코드 라인이나 특정 dart 파일에 대해서만 린트를 억제할 수 있습니다.
   rules:
-    # avoid_print: false  # Uncomment to disable the `avoid_print` rule
-    # prefer_single_quotes: true  # Uncomment to enable the `prefer_single_quotes` rule
-
-# Additional information about this file can be found at
-# https://dart.dev/guides/language/analysis-options
+    # avoid_print: false  # `avoid_print` 규칙을 비활성화하려면 주석 해제하세요
+    # prefer_single_quotes: true  # `prefer_single_quotes` 규칙을 활성화하려면 주석 해제하세요
+# 이 파일에 대한 추가 정보는
+# https://dart.dev/guides/language/analysis-options에서 확인할 수 있습니다
