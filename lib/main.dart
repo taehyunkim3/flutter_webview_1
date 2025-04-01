@@ -8,7 +8,7 @@ import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
 
-import 'package:flutter/foundation.dart';
+import 'package:flutter/foundation.dart'; //kReleaseMode
 import 'package:flutter/material.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:webview_flutter/webview_flutter.dart';
@@ -21,13 +21,29 @@ import 'package:webview_flutter_wkwebview/webview_flutter_wkwebview.dart';
 import 'package:kakao_flutter_sdk/kakao_flutter_sdk.dart';
 import 'package:sign_in_with_apple/sign_in_with_apple.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 
-void main() {
-  // Kakao SDK 초기화
-  KakaoSdk.init(nativeAppKey: '여기에_카카오_네이티브_앱_키_입력');
+// 환경 변수에서 웹뷰 URL 가져오기
+String get webviewUrl => dotenv.env['WEBVIEW_URL'] ?? 'https://google.com';
+// 환경 변수에서 카카오 네이티브 앱 키 가져오기
+String get kakaoNativeAppKey =>
+    dotenv.env['KAKAO_NATIVE_APP_KEY'] ?? 'kakao_native_app_key';
 
-  // 앱 실행 시 상태 표시줄 설정
+Future<void> main() async {
+  // 앱 실행 전 필요한 초기화 작업 수행
   WidgetsFlutterBinding.ensureInitialized();
+
+  // 환경에 따라 다른 설정 파일 로드
+  if (kReleaseMode) {
+    await dotenv.load(fileName: '.env.production');
+  } else {
+    await dotenv.load(fileName: '.env.development');
+  }
+
+  // Kakao SDK 초기화 (환경 변수에서 키 가져옴)
+  KakaoSdk.init(nativeAppKey: kakaoNativeAppKey);
+
+  // 상태 표시줄 설정
   SystemChrome.setSystemUIOverlayStyle(const SystemUiOverlayStyle(
     statusBarColor: Colors.transparent, // 상태 표시줄 배경을 투명하게
     statusBarIconBrightness: Brightness.dark, // 상태 표시줄 아이콘을 어둡게 (검정색)
@@ -147,7 +163,8 @@ Page resource error:
         },
       )
       // ====================== 앱과 웹 간의 통신 채널 설정 끝 ======================
-      ..loadRequest(Uri.parse('https://test-app.ttokttok365.com'));
+      // 환경 변수에서 URL 가져와서 로드
+      ..loadRequest(Uri.parse(webviewUrl));
 
     // Android 플랫폼 특화 설정
     if (controller.platform is AndroidWebViewController) {

@@ -2,6 +2,36 @@
 
 이 프로젝트는 Flutter에서 웹뷰를 사용하여 웹 페이지를 표시하고, 네이티브 앱과 웹 페이지 간의 통신을 구현한 샘플 앱입니다. 특히 카카오 로그인과 애플 로그인 기능을 네이티브에서 처리하고 그 결과를 웹으로 전달하는 브릿지를 포함하고 있습니다.
 
+## 환경 변수 설정
+
+이 앱은 환경 변수를 사용하여 설정을 관리합니다. `.env` 파일에 다음과 같은 환경 변수를 설정할 수 있습니다:
+
+```
+# 웹뷰 URL 설정
+WEBVIEW_URL=https://test-app.ttokttok365.com
+
+# 카카오 SDK 설정
+KAKAO_NATIVE_APP_KEY=여기에_카카오_네이티브_앱_키_입력
+```
+
+### 개발/프로덕션 환경 설정
+
+개발 및 프로덕션 환경을 구분하여 설정할 수 있습니다:
+
+- 개발 환경: `.env.development`
+- 프로덕션 환경: `.env.production`
+
+~~환경에 맞는 설정 파일을 로드하려면 `main.dart`에서 다음과 같이 코드를 수정하세요:~~
+개발 환경은 자동으로 설정됩니다.
+
+```dart
+// 개발 환경 설정 로드
+await dotenv.load(fileName: '.env.development');
+
+// 또는 프로덕션 환경 설정 로드
+await dotenv.load(fileName: '.env.production');
+```
+
 ## 앱과 웹 사이의 통신 방식
 
 Flutter 앱과 웹 페이지 간의 통신은 JavaScript 채널을 통해 이루어집니다. 통신은 크게 두 가지 방향으로 이루어집니다:
@@ -64,7 +94,7 @@ window.onKakaoLoginError = function (error) {
 
 ```dart
 // 카카오 SDK 초기화 (main() 함수에서)
-KakaoSdk.init(nativeAppKey: '여기에_카카오_네이티브_앱_키_입력');
+KakaoSdk.init(nativeAppKey: kakaoNativeAppKey);
 
 // 카카오 로그인 채널 설정
 controller.addJavaScriptChannel(
@@ -166,11 +196,13 @@ window.onFlutterResponse = function (response) {
 
 1. 웹 페이지에서는 반드시 위에서 설명한 콜백 함수들(`onKakaoLoginResult`, `onAppleLoginResult`, `onKakaoLoginError`, `onAppleLoginError`, `onFlutterResponse`)을 구현해야 합니다.
 
-2. 앱에서 카카오 SDK를 사용하기 위해서는 `KakaoSdk.init(nativeAppKey: '여기에_카카오_네이티브_앱_키_입력')`에 실제 카카오 네이티브 앱 키를 입력해야 합니다.
+2. 환경 변수 파일(`.env`, `.env.development`, `.env.production`)은 보안상 중요한 정보를 포함하므로 버전 관리 시스템(Git 등)에 추가하지 않도록 주의하세요. `.gitignore` 파일에 추가하는 것을 권장합니다.
 
-3. 애플 로그인을 iOS에서 사용하려면 Xcode에서 추가 설정이 필요합니다.
+3. 앱에서 카카오 SDK를 사용하기 위해서는 `.env` 파일의 `KAKAO_NATIVE_APP_KEY` 값을 실제 카카오 네이티브 앱 키로 변경해야 합니다.
 
-4. 로그인 후 받은 토큰은 보안을 위해 적절히 저장하고 관리해야 합니다.
+4. 애플 로그인을 iOS에서 사용하려면 Xcode에서 추가 설정이 필요합니다.
+
+5. 로그인 후 받은 토큰은 보안을 위해 적절히 저장하고 관리해야 합니다.
 
 ## 테스트 방법
 
